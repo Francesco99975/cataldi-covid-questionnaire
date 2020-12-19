@@ -1,5 +1,5 @@
 name: cataldi_covid_questionnaire
-description: A new Flutter project.
+description: A simple application made to make cataldi employees submit a form of notice about their health situaltion regarding COVID-19.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^0.5.12+4 #BSD
+  provider: ^4.3.2+3 #MIT
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
