@@ -1,3 +1,4 @@
+import 'package:cataldi_covid_questionnaire/screens/covid_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/status.dart';
@@ -25,20 +26,22 @@ class StartScreen extends StatelessWidget {
                             child:
                                 Text("Questionnaire Already Submitted Today"),
                           ),
-                          RaisedButton(
-                            onPressed: () async =>
-                                await status.setStatus(false),
-                            child: Text("RESET"),
-                            color: Colors.amber,
-                            textColor: Colors.blue,
-                          ),
+                          // RaisedButton(
+                          //   onPressed: () async =>
+                          //       await status.setStatus(false),
+                          //   child: Text("RESET"),
+                          //   color: Colors.amber,
+                          //   textColor: Colors.blue,
+                          // ),
                         ],
                       )
                     : RaisedButton(
-                        onPressed: () async {
-                          await status.setStatus(true);
-                          await status.setExpiryDate(
-                              DateTime.now().add(Duration(seconds: 10)));
+                        onPressed: () {
+                          // await status.setStatus(true);
+                          // await status.setExpiryDate(
+                          //     DateTime.now().add(Duration(seconds: 10)));
+                          Navigator.pushNamed(
+                              context, CovidFormScreen.ROUTE_NAME);
                         },
                         child: Text("START"),
                         color: Colors.amber,
