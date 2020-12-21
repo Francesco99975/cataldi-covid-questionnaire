@@ -1,3 +1,4 @@
+import 'package:cataldi_covid_questionnaire/providers/personal_info.dart';
 import 'package:cataldi_covid_questionnaire/screens/covid_form_screen.dart';
 import 'package:cataldi_covid_questionnaire/screens/failed_screen.dart';
 import 'package:cataldi_covid_questionnaire/screens/passed_screen.dart';
@@ -15,7 +16,10 @@ class CataldiCovidQuestionnaire extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => Status())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => Status()),
+        ChangeNotifierProvider(create: (_) => PersonalInfo())
+      ],
       child: MaterialApp(
         title: 'Cataldi Covid Questionnaire',
         theme: ThemeData(
@@ -37,7 +41,10 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<Status>(context, listen: false).loadStatus(),
+      future: Future.wait([
+        Provider.of<Status>(context, listen: false).loadStatus(),
+        Provider.of<PersonalInfo>(context, listen: false).loadInfo()
+      ]),
       builder: (context, snapshot) =>
           snapshot.connectionState == ConnectionState.waiting
               ? LoadingScreen()

@@ -1,4 +1,5 @@
 import 'package:cataldi_covid_questionnaire/models/covid_form.dart';
+import 'package:cataldi_covid_questionnaire/providers/personal_info.dart';
 import 'package:cataldi_covid_questionnaire/providers/status.dart';
 import 'package:cataldi_covid_questionnaire/screens/failed_screen.dart';
 import 'package:cataldi_covid_questionnaire/screens/passed_screen.dart';
@@ -19,6 +20,10 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
+      await Provider.of<PersonalInfo>(context, listen: false).setInfo(
+          fn: _covidForm.firstName,
+          ln: _covidForm.lastName,
+          mn: _covidForm.middleName);
       await Provider.of<Status>(context, listen: false).setStatus(true);
       await Provider.of<Status>(context, listen: false)
           .setExpiryDate(DateTime.now().add(Duration(seconds: 10)));
@@ -32,6 +37,10 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final info = Provider.of<PersonalInfo>(context);
+    _covidForm.firstName = info.firstName;
+    _covidForm.middleName = info.middleName;
+    _covidForm.lastName = info.lastName;
     return Scaffold(
       appBar: AppBar(
         title: FittedBox(
@@ -55,6 +64,7 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(labelText: 'First name'),
+                      initialValue: _covidForm.firstName,
                       validator: (value) => value.isEmpty
                           ? 'Please enter your first name.'
                           : null,
@@ -62,6 +72,7 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
                           setState(() => _covidForm.firstName = val),
                     ),
                     TextFormField(
+                      initialValue: _covidForm.middleName,
                       decoration: InputDecoration(labelText: 'Middle name'),
                       // validator: (value) => value.isEmpty
                       //     ? 'Please enter your middle name.'
@@ -70,6 +81,7 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
                           setState(() => _covidForm.middleName = val),
                     ),
                     TextFormField(
+                      initialValue: _covidForm.lastName,
                       decoration: InputDecoration(labelText: 'Last name'),
                       validator: (value) =>
                           value.isEmpty ? 'Please enter your last name.' : null,
