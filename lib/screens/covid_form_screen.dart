@@ -20,13 +20,22 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
+      final now = DateTime.now();
       await Provider.of<PersonalInfo>(context, listen: false).setInfo(
           fn: _covidForm.firstName,
           ln: _covidForm.lastName,
           mn: _covidForm.middleName);
       await Provider.of<Status>(context, listen: false).setStatus(true);
+
       await Provider.of<Status>(context, listen: false)
-          .setExpiryDate(DateTime.now().add(Duration(seconds: 10)));
+          .setExpiryDate(now.add(Duration(seconds: 10)));
+
+      // await Provider.of<Status>(context, listen: false).setExpiryDate(now.add(
+      //     Duration(
+      //         hours: 24 - now.hour,
+      //         minutes: -now.minute,
+      //         seconds: -now.second)));
+
       if (_covidForm.passed()) {
         Navigator.pushReplacementNamed(context, PassedScreen.ROUTE_NAME);
       } else {
