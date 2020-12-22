@@ -26,10 +26,16 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
     if (form.validate()) {
       form.save();
       final now = DateTime.now();
+
+      await Provider.of<Email>(context, listen: false).sendMail(_covidForm);
+
+      form.save();
+
       await Provider.of<PersonalInfo>(context, listen: false).setInfo(
           fn: _covidForm.firstName,
           ln: _covidForm.lastName,
           mn: _covidForm.middleName);
+
       await Provider.of<Status>(context, listen: false).setStatus(true);
 
       // await Provider.of<Status>(context, listen: false)
@@ -40,10 +46,6 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
               hours: 24 - now.hour,
               minutes: -now.minute,
               seconds: -now.second)));
-
-      print(_covidForm.middleName);
-
-      await Provider.of<Email>(context, listen: false).sendMail(_covidForm);
 
       if (_covidForm.passed()) {
         Navigator.pushReplacementNamed(context, PassedScreen.ROUTE_NAME);

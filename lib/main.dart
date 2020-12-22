@@ -30,6 +30,7 @@ class CataldiCovidQuestionnaire extends StatelessWidget {
             primarySwatch: Colors.teal,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             brightness: Brightness.dark,
+            fontFamily: "Oxygen",
             textTheme: TextTheme(
                 headline1: TextStyle(
                     color: Colors.amber,
