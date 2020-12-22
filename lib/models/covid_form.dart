@@ -26,7 +26,9 @@ class CovidForm {
   bool travelled = false;
   bool contact = false;
 
-  Future<void> sendMail() async {}
+  bool hasMiddle() {
+    return this.middleName.isNotEmpty;
+  }
 
   bool passed() {
     if (travelled || contact) return false;

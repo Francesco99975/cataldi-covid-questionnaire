@@ -10,42 +10,46 @@ class StartScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           width: double.infinity,
-          color: Colors.grey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              FittedBox(
-                child: Text("Cataldi Covid Questionnaire"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FittedBox(
+                  child: Text(
+                    "Cataldi Covid Questionnaire",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                ),
               ),
               Consumer<Status>(
                 builder: (_, status, __) => status.completed
-                    ? Column(
-                        children: [
-                          FittedBox(
-                            child:
-                                Text("Questionnaire Already Submitted Today"),
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: FittedBox(
+                          child: InkWell(
+                            onLongPress: () async =>
+                                await status.setStatus(false),
+                            child: Text(
+                              "Questionnaire Already Submitted Today. \nCome back tomorrow.",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  .copyWith(color: Colors.red, fontSize: 22),
+                            ),
                           ),
-                          // RaisedButton(
-                          //   onPressed: () async =>
-                          //       await status.setStatus(false),
-                          //   child: Text("RESET"),
-                          //   color: Colors.amber,
-                          //   textColor: Colors.blue,
-                          // ),
-                        ],
+                        ),
                       )
-                    : RaisedButton(
+                    : FlatButton(
                         onPressed: () {
-                          // await status.setStatus(true);
-                          // await status.setExpiryDate(
-                          //     DateTime.now().add(Duration(seconds: 10)));
                           Navigator.pushNamed(
                               context, CovidFormScreen.ROUTE_NAME);
                         },
-                        child: Text("START"),
-                        color: Colors.amber,
-                        textColor: Colors.blue,
+                        child: Text(
+                          "START",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
                       ),
               )
             ],

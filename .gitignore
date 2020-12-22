@@ -1,5 +1,7 @@
 # Miscellaneous
 .vscode
+env.txt
+.env
 *.class
 *.log
 *.pyc

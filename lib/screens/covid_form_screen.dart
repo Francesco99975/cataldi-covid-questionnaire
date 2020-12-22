@@ -1,4 +1,5 @@
 import 'package:cataldi_covid_questionnaire/models/covid_form.dart';
+import 'package:cataldi_covid_questionnaire/providers/email.dart';
 import 'package:cataldi_covid_questionnaire/providers/personal_info.dart';
 import 'package:cataldi_covid_questionnaire/providers/status.dart';
 import 'package:cataldi_covid_questionnaire/screens/failed_screen.dart';
@@ -15,8 +16,12 @@ class CovidFormScreen extends StatefulWidget {
 class _CovidFormScreenState extends State<CovidFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _covidForm = CovidForm();
+  bool _loading = false;
 
   Future<void> _save() async {
+    setState(() {
+      _loading = true;
+    });
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -27,14 +32,18 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
           mn: _covidForm.middleName);
       await Provider.of<Status>(context, listen: false).setStatus(true);
 
-      await Provider.of<Status>(context, listen: false)
-          .setExpiryDate(now.add(Duration(seconds: 10)));
+      // await Provider.of<Status>(context, listen: false)
+      //     .setExpiryDate(now.add(Duration(seconds: 10)));
 
-      // await Provider.of<Status>(context, listen: false).setExpiryDate(now.add(
-      //     Duration(
-      //         hours: 24 - now.hour,
-      //         minutes: -now.minute,
-      //         seconds: -now.second)));
+      await Provider.of<Status>(context, listen: false).setExpiryDate(now.add(
+          Duration(
+              hours: 24 - now.hour,
+              minutes: -now.minute,
+              seconds: -now.second)));
+
+      print(_covidForm.middleName);
+
+      await Provider.of<Email>(context, listen: false).sendMail(_covidForm);
 
       if (_covidForm.passed()) {
         Navigator.pushReplacementNamed(context, PassedScreen.ROUTE_NAME);
@@ -208,8 +217,20 @@ class _CovidFormScreenState extends State<CovidFormScreen> {
                       height: 20,
                     ),
                     RaisedButton(
-                      onPressed: _save,
-                      child: const Text("Submit"),
+                      elevation: 5,
+                      splashColor: Colors.black12,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25)),
+                      onPressed: !_loading ? _save : null,
+                      child: !_loading
+                          ? Text(
+                              "SUBMIT",
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          : CircularProgressIndicator(
+                              backgroundColor: Colors.amber,
+                            ),
                     )
                   ],
                 ),
